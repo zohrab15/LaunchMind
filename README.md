@@ -53,8 +53,8 @@ In upcoming versions, we plan to integrate AI to:
 ## Setup
 
 ```bash
-git clone https://github.com/your-username/business-risk-analyzer.git
-cd business-risk-analyzer
+git clone https://github.com/zohrab15/LaunchMind.git
+cd LaunchMind
 npm install  # or install Python requirements
 ```
 
