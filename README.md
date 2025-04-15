@@ -1,4 +1,5 @@
-# Business Risk Analyzer
+# 🚀 LaunchMind 
+Your idea’s first checkpoint.
 
 ![Status](https://img.shields.io/badge/status-in_development-yellow)
 ![License](https://img.shields.io/badge/license-MIT-blue)
