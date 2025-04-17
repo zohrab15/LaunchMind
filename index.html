@@ -95,6 +95,16 @@
 
       <button type="submit">Qiymətləndir</button>
     </form>
+    <!-- Qiymətləndirmə nəticəsi -->
+<div id="resultContainer" style="display:none; margin-top: 30px;">
+  <h2>Qiymətləndirmə Nəticəsi</h2>
+  <p><strong>Uğur ehtimalı:</strong> <span id="successPercent">0%</span></p>
+  <div style="background: #e0e0e0; border-radius: 10px; height: 25px;">
+    <div id="progressBar" style="height: 25px; border-radius: 10px; background: #4caf50; width: 0%; transition: width 0.5s;"></div>
+  </div>
+  <p id="feedbackText" style="margin-top: 15px; font-style: italic;"></p>
+</div>
+
   </div>
 
   <script>
@@ -130,43 +140,51 @@
         alert("Xəta baş verdi, yenidən yoxlayın.");
       });
       */
-      <div id="resultContainer" style="display:none; margin-top: 30px;">
-  <h2>Qiymətləndirmə Nəticəsi</h2>
-  <p><strong>Uğur ehtimalı:</strong> <span id="successPercent">0%</span></p>
-  <div style="background: #e0e0e0; border-radius: 10px; height: 25px;">
-    <div id="progressBar" style="height: 25px; border-radius: 10px; background: #4caf50; width: 0%; transition: width 0.5s;"></div>
-  </div>
-  <p id="feedbackText" style="margin-top: 15px; font-style: italic;"></p>
-</div>
-function showEvaluationResult(probability) {
-  const progressBar = document.getElementById("progressBar");
-  const successPercent = document.getElementById("successPercent");
-  const feedbackText = document.getElementById("feedbackText");
-  const resultContainer = document.getElementById("resultContainer");
-
-  // Faizi göstəriciyə yaz
-  successPercent.textContent = probability + "%";
-  progressBar.style.width = probability + "%";
-
-  // Rəngə görə status dəyiş
-  if (probability >= 80) {
-    progressBar.style.backgroundColor = "#4caf50"; // yaşıl
-    feedbackText.textContent = "İdeyanız yüksək uğur potensialına malikdir!";
-  } else if (probability >= 50) {
-    progressBar.style.backgroundColor = "#ffc107"; // narıncı
-    feedbackText.textContent = "İdeyanızın potensialı var, lakin inkişaf etdirməyə ehtiyac var.";
-  } else {
-    progressBar.style.backgroundColor = "#f44336"; // qırmızı
-    feedbackText.textContent = "Riskli ideyadır. Yenidən baxmaq və təkmilləşdirmək faydalı olar.";
-  }
-
-  resultContainer.style.display = "block";
-}
-// Simulyasiya üçün random faiz
-const simulatedSuccess = Math.floor(Math.random() * 61) + 30; // 30%–90%
-showEvaluationResult(simulatedSuccess);
-
     });
   </script>
+<script>
+  function showEvaluationResult(probability) {
+    const progressBar = document.getElementById("progressBar");
+    const successPercent = document.getElementById("successPercent");
+    const feedbackText = document.getElementById("feedbackText");
+    const resultContainer = document.getElementById("resultContainer");
+
+    // Faizi yaz
+    successPercent.textContent = probability + "%";
+    progressBar.style.width = probability + "%";
+
+    // Rəng və məsləhət
+    if (probability >= 80) {
+      progressBar.style.backgroundColor = "#4caf50";
+      feedbackText.textContent = "İdeyanız yüksək uğur potensialına malikdir!";
+    } else if (probability >= 50) {
+      progressBar.style.backgroundColor = "#ffc107";
+      feedbackText.textContent = "İdeyanızın potensialı var, lakin inkişaf etdirməyə ehtiyac var.";
+    } else {
+      progressBar.style.backgroundColor = "#f44336";
+      feedbackText.textContent = "Riskli ideyadır. Yenidən baxmaq faydalı olar.";
+    }
+
+    resultContainer.style.display = "block";
+  }
+
+  // Form göndəriləndə işləyəcək
+  function handleFormSubmit(event) {
+    event.preventDefault(); // səhifənin yenilənməsinin qarşısını alır
+
+    // Burada real ML nəticəsi əvəzinə random simulyasiya edirik:
+    const simulatedSuccess = Math.floor(Math.random() * 61) + 30; // 30-90 arası
+    showEvaluationResult(simulatedSuccess);
+  }
+
+  // Form tapılır və submit hadisəsinə bağlanır
+  window.onload = function () {
+    const form = document.querySelector("form");
+    if (form) {
+      form.addEventListener("submit", handleFormSubmit);
+    }
+  };
+</script>
+
 </body>
 </html>
