@@ -1,116 +1,65 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Launchmind - Biznes İdeya Qiymətləndirmə</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Biznes İdeyanızın Qiymətləndirilməsi</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f6f8;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f7fa;
       margin: 0;
       padding: 20px;
     }
+
     .container {
-      max-width: 600px;
-      margin: auto;
-      background-color: white;
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 15px rgba(0,0,0,0.08);
     }
+
     h1 {
       text-align: center;
+      color: #222;
+    }
+
+    label {
+      margin-top: 20px;
+      display: block;
+      font-weight: bold;
       color: #333;
     }
-    label {
-      display: block;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-    textarea, select, input[type="text"] {
+
+    textarea {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
+      padding: 12px;
+      margin-top: 8px;
       border-radius: 8px;
       border: 1px solid #ccc;
       box-sizing: border-box;
       resize: vertical;
     }
+
     button {
       margin-top: 30px;
       width: 100%;
-      padding: 12px;
-      background-color: #007BFF;
+      padding: 14px;
+      background-color: #28a745;
       color: white;
-      font-size: 16px;
       border: none;
       border-radius: 8px;
+      font-size: 16px;
       cursor: pointer;
     }
+
     button:hover {
-      background-color: #0056b3;
+      background-color: #218838;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Biznes İdeyanızı Qiymətləndirin</h1>
-    <form id="ideaForm">
-      <label for="problem">1. Həll etmək istədiyiniz əsas problemi təsvir edin:</label>
-      <textarea id="problem" name="problem" rows="4" required></textarea>
-
-      <label for="solution">2. Bu problemi necə həll etməyi planlaşdırırsınız?</label>
-      <textarea id="solution" name="solution" rows="4" required></textarea>
-
-      <label for="target">3. Hədəf auditoriyanız kimdir?</label>
-      <textarea id="target" name="target" rows="3" required></textarea>
-
-      <label for="unique">4. Sizin ideyanız bazardakı digər həllərdən nə ilə fərqlənir?</label>
-      <textarea id="unique" name="unique" rows="3" required></textarea>
-
-      <label for="experience">5. Bu sahədə hər hansı təcrübəniz varmı?</label>
-      <select id="experience" name="experience" required>
-        <option value="">Seçin...</option>
-        <option value="he">Heç bir təcrübəm yoxdur</option>
-        <option value="orta">Orta səviyyəli təcrübəm var</option>
-        <option value="yuksek">Yüksək səviyyədə təcrübəm var</option>
-      </select>
-
-      <button type="submit">Qiymətləndir</button>
-    </form>
-  </div>
-
-  <script>
-    document.getElementById("ideaForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const data = {
-        problem: document.getElementById("problem").value,
-        solution: document.getElementById("solution").value,
-        target: document.getElementById("target").value,
-        unique: document.getElementById("unique").value,
-        experience: document.getElementById("experience").value
-      };
-
-      // Sadə POST request (backend bağlantısı üçün)
-      fetch("https://your-backend-api.com/analyze", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      })
-      .then(response => response.json())
-      .then(result => {
-        alert("Uğur ehtimalı: " + result.success_probability + "%");
-        // Burada nəticə səhifəsinə yönləndirmək də olar
-      })
-      .catch(error => {
-        console.error("Xəta baş verdi:", error);
-        alert("Bir xəta baş verdi. Zəhmət olmasa yenidən yoxlayın.");
-      });
-    });
-  </script>
-</body>
-</html>
+    <h1>Biznes İde
