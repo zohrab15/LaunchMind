@@ -1,190 +1,54 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Launchmind – Biznes İdeyanızı Qiymətləndirək!</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f4f8;
-      margin: 0;
-      padding: 20px;
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f7f7f7;
     }
-
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-    }
-
     h1 {
-      text-align: center;
-      color: #2a2a2a;
-      margin-bottom: 30px;
+      color: #2c3e50;
     }
-
     label {
       font-weight: bold;
-      display: block;
-      margin: 20px 0 8px;
-      color: #333;
     }
-
-    input[type="text"],
-    textarea,
-    select {
+    textarea, input, select {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
+      margin-top: 6px;
+      margin-bottom: 20px;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-      box-sizing: border-box;
-    }
-
-    textarea {
+      border-radius: 5px;
       resize: vertical;
     }
-
     button {
-      width: 100%;
-      padding: 14px;
-      background-color: #007bff;
+      background-color: #4caf50;
       color: white;
-      font-size: 16px;
+      padding: 12px 20px;
       border: none;
-      border-radius: 8px;
-      margin-top: 30px;
+      border-radius: 5px;
       cursor: pointer;
+      font-size: 16px;
     }
-
     button:hover {
-      background-color: #0056b3;
+      background-color: #45a049;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Launchmind – Biznes İdeyanızı Qiymətləndirək!</h1>
-    <form id="biznesForm">
 
-      <label for="idea">1. Biznes ideyanız nədir?</label>
-      <textarea id="idea" name="idea" rows="3" placeholder="Qısa şəkildə biznes fikrinizi təsvir edin (nə təklif edirsiniz və kimə?)" required></textarea>
+  <h1>Launchmind – Biznes İdeyanızı Qiymətləndirək!</h1>
 
-      <label for="problem">2. Bu ideya hansı problemi həll edir və necə fərqlənir?</label>
-      <textarea id="problem" name="problem" rows="3" placeholder="Bazardakı problemi və sizin fərqinizi izah edin" required></textarea>
+  <form id="ideaForm">
+    <label for="idea">1. Biznes ideyanız nədir?</label>
+    <textarea id="idea" placeholder="Qısa şəkildə biznes fikrinizi təsvir edin (nə təklif edirsiniz və kimə?)"></textarea>
 
-      <label for="audience">3. Kimlərə xidmət edirsiniz və hansı bazarda fəaliyyət göstərmək istəyirsiniz?</label>
-      <input type="text" id="audience" name="audience" placeholder="Hədəf auditoriya (məs: tələbələr, valideynlər, biznes sahibləri)" required />
-      <input type="text" id="market" name="market" placeholder="Hədəf bazar (məs: lokal, region, beynəlxalq)" required />
+    <label for="problem">2. Bu ideya hansı problemi həll edir və necə fərqlənir?</label>
+    <textarea id="problem" placeholder="Bazardakı problemi və sizin fərqinizi izah edin"></textarea>
 
-      <label for="stage">4. İdeyanız hansı mərhələdədir və əlinizdə hansı resurslar var?</label>
-      <select id="stage" name="stage" required>
-        <option selected disabled>Biznes hansı mərhələdədir?</option>
-        <option value="idea">Fikir mərhələsində</option>
-        <option value="prototype">Prototip var</option>
-        <option value="launched">Artıq fəaliyyət göstərir</option>
-      </select>
-      <input type="text" id="resources" name="resources" placeholder="Əlinizdə olan resurslar (məs: komanda, büdcə, təcrübə)" required />
-
-      <label for="goal">5. Əsas məqsədiniz və sizi narahat edən nədir?</label>
-      <textarea id="goal" name="goal" rows="3" placeholder="Uğur üçün hədəfiniz və qorxduğunuz risklər nələrdir?" required></textarea>
-
-      <button type="submit">Qiymətləndir</button>
-    </form>
-    <!-- Qiymətləndirmə nəticəsi -->
-<div id="resultContainer" style="display:none; margin-top: 30px;">
-  <h2>Qiymətləndirmə Nəticəsi</h2>
-  <p><strong>Uğur ehtimalı:</strong> <span id="successPercent">0%</span></p>
-  <div style="background: #e0e0e0; border-radius: 10px; height: 25px;">
-    <div id="progressBar" style="height: 25px; border-radius: 10px; background: #4caf50; width: 0%; transition: width 0.5s;"></div>
-  </div>
-  <p id="feedbackText" style="margin-top: 15px; font-style: italic;"></p>
-</div>
-
-  </div>
-
-  <script>
-    document.getElementById("biznesForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const data = {
-        idea: document.getElementById("idea").value,
-        problem: document.getElementById("problem").value,
-        audience: document.getElementById("audience").value,
-        market: document.getElementById("market").value,
-        stage: document.getElementById("stage").value,
-        resources: document.getElementById("resources").value,
-        goal: document.getElementById("goal").value
-      };
-
-      console.log("Form məlumatları:", data);
-
-      // ML/API sisteminə göndərmək üçün hazırlıq:
-      /*
-      fetch("https://api.launchmind.ai/evaluate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      })
-      .then(res => res.json())
-      .then(result => {
-        alert("Uğur ehtimalı: " + result.success_probability + "%");
-      })
-      .catch(err => {
-        alert("Xəta baş verdi, yenidən yoxlayın.");
-      });
-      */
-    });
-  </script>
-<script>
-  function showEvaluationResult(probability) {
-    const progressBar = document.getElementById("progressBar");
-    const successPercent = document.getElementById("successPercent");
-    const feedbackText = document.getElementById("feedbackText");
-    const resultContainer = document.getElementById("resultContainer");
-
-    // Faizi yaz
-    successPercent.textContent = probability + "%";
-    progressBar.style.width = probability + "%";
-
-    // Rəng və məsləhət
-    if (probability >= 80) {
-      progressBar.style.backgroundColor = "#4caf50";
-      feedbackText.textContent = "İdeyanız yüksək uğur potensialına malikdir!";
-    } else if (probability >= 50) {
-      progressBar.style.backgroundColor = "#ffc107";
-      feedbackText.textContent = "İdeyanızın potensialı var, lakin inkişaf etdirməyə ehtiyac var.";
-    } else {
-      progressBar.style.backgroundColor = "#f44336";
-      feedbackText.textContent = "Riskli ideyadır. Yenidən baxmaq faydalı olar.";
-    }
-
-    resultContainer.style.display = "block";
-  }
-
-  // Form göndəriləndə işləyəcək
-  function handleFormSubmit(event) {
-    event.preventDefault(); // səhifənin yenilənməsinin qarşısını alır
-
-    // Burada real ML nəticəsi əvəzinə random simulyasiya edirik:
-    const simulatedSuccess = Math.floor(Math.random() * 61) + 30; // 30-90 arası
-    showEvaluationResult(simulatedSuccess);
-  }
-
-  // Form tapılır və submit hadisəsinə bağlanır
-  window.onload = function () {
-    const form = document.querySelector("form");
-    if (form) {
-      form.addEventListener("submit", handleFormSubmit);
-    }
-  };
-</script>
-
-</body>
-</html>
+    <label for="audience">3. Kimlərə xidmət edirsiniz və hansı bazarda fəaliyyət göstərmək istəyirsiniz?</label>
+    <
