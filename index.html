@@ -2,16 +2,16 @@
 <html lang="az">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Launchmind – Biznes İdeyanızı Qiymətləndirək!</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 40px;
-      background-color: #f7f7f7;
+      padding: 20px;
+      background-color: #f2f2f2;
     }
-    h1 {
-      color: #2c3e50;
+    h2 {
+      color: #333;
     }
     label {
       font-weight: bold;
@@ -19,64 +19,88 @@
     textarea, input, select {
       width: 100%;
       padding: 10px;
-      margin-top: 6px;
-      margin-bottom: 20px;
+      margin-top: 5px;
+      margin-bottom: 15px;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 4px;
       resize: vertical;
     }
     button {
-      background-color: #4caf50;
+      background-color: #007bff;
       color: white;
       padding: 12px 20px;
       border: none;
-      border-radius: 5px;
+      border-radius: 4px;
       cursor: pointer;
-      font-size: 16px;
+      font-weight: bold;
     }
     button:hover {
-      background-color: #45a049;
+      background-color: #0056b3;
+    }
+    .result {
+      margin-top: 30px;
+      display: none;
+    }
+    .progress-bar {
+      width: 100%;
+      background-color: #ddd;
+      border-radius: 20px;
+      overflow: hidden;
+      height: 30px;
+      margin-top: 10px;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      text-align: center;
+      color: white;
+      line-height: 30px;
+      font-weight: bold;
+      transition: width 1s ease-in-out;
     }
   </style>
 </head>
 <body>
 
-  <h1>Launchmind – Biznes İdeyanızı Qiymətləndirək!</h1>
-
-  <form id="ideaForm">
+  <h2>Launchmind – Biznes İdeyanızı Qiymətləndirək!</h2>
+  <form>
     <label for="idea">1. Biznes ideyanız nədir?</label>
     <textarea id="idea" placeholder="Qısa şəkildə biznes fikrinizi təsvir edin (nə təklif edirsiniz və kimə?)"></textarea>
 
     <label for="problem">2. Bu ideya hansı problemi həll edir və necə fərqlənir?</label>
     <textarea id="problem" placeholder="Bazardakı problemi və sizin fərqinizi izah edin"></textarea>
 
-    <label for="audience">3. Kimlərə xidmət edirsiniz və hansı bazarda fəaliyyət göstərmək istəyirsiniz?</label>
-    <input type="text" id="audience" placeholder="Hədəf auditoriya (məs: tələbələr, valideynlər, biznes sahibləri)" />
-    <input type="text" id="market" placeholder="Hədəf bazar (məs: lokal, region, beynəlxalq)" />
+    <label for="audience">3. Kimlərə xidmət edirsiniz?</label>
+    <input id="audience" type="text" placeholder="Hədəf auditoriya (məs: tələbələr, valideynlər, biznes sahibləri)"/>
 
-    <label for="stage">4. İdeyanız hansı mərhələdədir və əlinizdə hansı resurslar var?</label>
+    <label for="market">4. Hansı bazarda fəaliyyət göstərmək istəyirsiniz?</label>
+    <input id="market" type="text" placeholder="Hədəf bazar (məs: lokal, region, beynəlxalq)"/>
+
+    <label for="stage">5. İdeyanız hansı mərhələdədir?</label>
     <select id="stage">
       <option selected disabled>Biznes hansı mərhələdədir?</option>
       <option value="idea">Fikir mərhələsində</option>
       <option value="prototype">Prototip var</option>
       <option value="launched">Artıq fəaliyyət göstərir</option>
     </select>
-    <input type="text" id="resources" placeholder="Əlinizdə olan resurslar (məs: komanda, büdcə, təcrübə)" />
 
-    <label for="goal">5. Əsas məqsədiniz və sizi narahat edən nədir?</label>
+    <label for="resources">6. Əlinizdə hansı resurslar var?</label>
+    <input id="resources" type="text" placeholder="Əlinizdə olan resurslar (məs: komanda, büdcə, təcrübə)"/>
+
+    <label for="goal">7. Əsas məqsədiniz və sizi narahat edən nədir?</label>
     <textarea id="goal" placeholder="Uğur üçün hədəfiniz və qorxduğunuz risklər nələrdir?"></textarea>
 
     <button type="submit">Qiymətləndir</button>
   </form>
 
-  <!-- Nəticə göstəricisi -->
-  <div id="resultContainer" style="display:none; margin-top: 30px;">
-    <h2>Qiymətləndirmə Nəticəsi</h2>
-    <p><strong>Uğur ehtimalı:</strong> <span id="successPercent">0%</span></p>
-    <div style="background: #e0e0e0; border-radius: 10px; height: 25px;">
-      <div id="progressBar" style="height: 25px; border-radius: 10px; background: #4caf50; width: 0%; transition: width 0.5s;"></div>
+  <div class="result" id="resultContainer">
+    <h3>Nəticə:</h3>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressBar">
+        <span id="successPercent">0%</span>
+      </div>
     </div>
-    <p id="feedbackText" style="margin-top: 15px; font-style: italic;"></p>
+    <p id="feedbackText"></p>
   </div>
 
   <script>
@@ -103,9 +127,35 @@
       resultContainer.style.display = "block";
     }
 
+    function isFormComplete() {
+      const requiredFields = [
+        "idea",
+        "problem",
+        "audience",
+        "market",
+        "stage",
+        "resources",
+        "goal"
+      ];
+
+      for (const fieldId of requiredFields) {
+        const field = document.getElementById(fieldId);
+        if (!field || field.value.trim() === "" || field.value === "Biznes hansı mərhələdədir?") {
+          return false;
+        }
+      }
+      return true;
+    }
+
     function handleFormSubmit(event) {
       event.preventDefault();
-      const simulatedSuccess = Math.floor(Math.random() * 61) + 30; // 30-90 arası
+
+      if (!isFormComplete()) {
+        alert("Zəhmət olmasa bütün sahələri doldurun.");
+        return;
+      }
+
+      const simulatedSuccess = Math.floor(Math.random() * 61) + 30; // 30%-90% arası
       showEvaluationResult(simulatedSuccess);
     }
 
@@ -116,6 +166,5 @@
       }
     };
   </script>
-
 </body>
 </html>
