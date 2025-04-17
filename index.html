@@ -1,65 +1,136 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Biznes İdeyanızın Qiymətləndirilməsi</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Launchmind – Biznes İdeyanızı Qiymətləndirək!</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #f5f7fa;
+      background-color: #f0f4f8;
       margin: 0;
       padding: 20px;
     }
 
     .container {
-      max-width: 700px;
-      margin: 40px auto;
-      background: #fff;
+      max-width: 800px;
+      margin: auto;
+      background-color: #fff;
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
     }
 
     h1 {
       text-align: center;
-      color: #222;
+      color: #2a2a2a;
+      margin-bottom: 30px;
     }
 
     label {
-      margin-top: 20px;
-      display: block;
       font-weight: bold;
+      display: block;
+      margin: 20px 0 8px;
       color: #333;
     }
 
-    textarea {
+    input[type="text"],
+    textarea,
+    select {
       width: 100%;
       padding: 12px;
-      margin-top: 8px;
-      border-radius: 8px;
       border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
       box-sizing: border-box;
+    }
+
+    textarea {
       resize: vertical;
     }
 
     button {
-      margin-top: 30px;
       width: 100%;
       padding: 14px;
-      background-color: #28a745;
+      background-color: #007bff;
       color: white;
+      font-size: 16px;
       border: none;
       border-radius: 8px;
-      font-size: 16px;
+      margin-top: 30px;
       cursor: pointer;
     }
 
     button:hover {
-      background-color: #218838;
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Biznes İde
+    <h1>Launchmind – Biznes İdeyanızı Qiymətləndirək!</h1>
+    <form id="biznesForm">
+
+      <label for="idea">1. Biznes ideyanız nədir?</label>
+      <textarea id="idea" name="idea" rows="3" placeholder="Qısa şəkildə biznes fikrinizi təsvir edin (nə təklif edirsiniz və kimə?)" required></textarea>
+
+      <label for="problem">2. Bu ideya hansı problemi həll edir və necə fərqlənir?</label>
+      <textarea id="problem" name="problem" rows="3" placeholder="Bazardakı problemi və sizin fərqinizi izah edin" required></textarea>
+
+      <label for="audience">3. Kimlərə xidmət edirsiniz və hansı bazarda fəaliyyət göstərmək istəyirsiniz?</label>
+      <input type="text" id="audience" name="audience" placeholder="Hədəf auditoriya (məs: tələbələr, valideynlər, biznes sahibləri)" required />
+      <input type="text" id="market" name="market" placeholder="Hədəf bazar (məs: lokal, region, beynəlxalq)" required />
+
+      <label for="stage">4. İdeyanız hansı mərhələdədir və əlinizdə hansı resurslar var?</label>
+      <select id="stage" name="stage" required>
+        <option selected disabled>Biznes hansı mərhələdədir?</option>
+        <option value="idea">Fikir mərhələsində</option>
+        <option value="prototype">Prototip var</option>
+        <option value="launched">Artıq fəaliyyət göstərir</option>
+      </select>
+      <input type="text" id="resources" name="resources" placeholder="Əlinizdə olan resurslar (məs: komanda, büdcə, təcrübə)" required />
+
+      <label for="goal">5. Əsas məqsədiniz və sizi narahat edən nədir?</label>
+      <textarea id="goal" name="goal" rows="3" placeholder="Uğur üçün hədəfiniz və qorxduğunuz risklər nələrdir?" required></textarea>
+
+      <button type="submit">Qiymətləndir</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("biznesForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const data = {
+        idea: document.getElementById("idea").value,
+        problem: document.getElementById("problem").value,
+        audience: document.getElementById("audience").value,
+        market: document.getElementById("market").value,
+        stage: document.getElementById("stage").value,
+        resources: document.getElementById("resources").value,
+        goal: document.getElementById("goal").value
+      };
+
+      console.log("Form məlumatları:", data);
+
+      // ML/API sisteminə göndərmək üçün hazırlıq:
+      /*
+      fetch("https://api.launchmind.ai/evaluate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(result => {
+        alert("Uğur ehtimalı: " + result.success_probability + "%");
+      })
+      .catch(err => {
+        alert("Xəta baş verdi, yenidən yoxlayın.");
+      });
+      */
+    });
+  </script>
+</body>
+</html>
