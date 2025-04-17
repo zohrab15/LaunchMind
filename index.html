@@ -1,44 +1,42 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Launchmind – Biznes İdeyanızı Qiymətləndirək!</title>
+  <title>LaunchMind – Your idea’s first checkpoint</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
-      background: #f0f0f5;
+      max-width: 700px;
+      margin: auto;
+      background-color: #f4f4f4;
     }
     h1 {
       text-align: center;
-      color: #333;
+      color: #2c3e50;
     }
-    form {
-      max-width: 600px;
-      margin: 0 auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    p.slogan {
+      text-align: center;
+      font-style: italic;
+      color: #555;
+      margin-top: -10px;
+      margin-bottom: 30px;
     }
-    textarea, input, select {
+    label {
+      font-weight: bold;
+    }
+    textarea, input, select, button {
       width: 100%;
-      margin: 10px 0;
+      margin: 10px 0 20px 0;
       padding: 10px;
-      font-size: 1em;
       border-radius: 5px;
       border: 1px solid #ccc;
-      resize: vertical;
     }
     button {
-      width: 100%;
-      padding: 12px;
-      background-color: #4caf50;
+      background-color: #2ecc71;
       color: white;
-      font-size: 1.1em;
       border: none;
-      border-radius: 5px;
       cursor: pointer;
     }
     button:disabled {
@@ -46,150 +44,80 @@
       cursor: not-allowed;
     }
     .result {
-      margin-top: 30px;
-      display: none;
-    }
-    .progress {
-      height: 25px;
-      background: #eee;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-top: 20px;
       border-radius: 5px;
-      overflow: hidden;
-    }
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      line-height: 25px;
-      color: white;
-      text-align: center;
-      background-color: #4caf50;
-      transition: width 1s ease-in-out;
-    }
-    .feedback {
-      margin-top: 10px;
       font-weight: bold;
-      text-align: center;
     }
   </style>
 </head>
 <body>
-  <h1>Launchmind – Biznes İdeyanızı Qiymətləndirək!</h1>
 
-  <form>
-    <label for="idea">1. Biznes ideyanız nədir?</label>
-    <textarea id="idea" placeholder="Qısa şəkildə biznes fikrinizi təsvir edin (nə təklif edirsiniz və kimə?)"></textarea>
+  <h1>LaunchMind</h1>
+  <p class="slogan">Your idea’s first checkpoint.</p>
 
-    <label for="problem">2. Bu ideya hansı problemi həll edir və necə fərqlənir?</label>
-    <textarea id="problem" placeholder="Bazardakı problemi və sizin fərqinizi izah edin"></textarea>
+  <form id="ideaForm">
+    <label for="idea">1. What is your business idea?</label>
+    <textarea id="idea" placeholder="Briefly describe your business idea (what do you offer and to whom?)"></textarea>
 
-    <label for="audience">3. Kimlərə xidmət edirsiniz?</label>
-    <input id="audience" type="text" placeholder="Hədəf auditoriya (məs: tələbələr, valideynlər, biznes sahibləri)" />
+    <label for="problem">2. What problem does it solve and how is it unique?</label>
+    <textarea id="problem" placeholder="Explain the problem in the market and how you are different."></textarea>
 
-    <label for="market">Hansı bazarda fəaliyyət göstərmək istəyirsiniz?</label>
-    <input id="market" type="text" placeholder="Hədəf bazar (məs: lokal, region, beynəlxalq)" />
+    <label for="audience">3. Who are your target customers and which market?</label>
+    <input id="audience" type="text" placeholder="Target audience (e.g., students, parents, business owners)" />
+    <input id="market" type="text" placeholder="Target market (e.g., local, regional, global)" />
 
-    <label for="stage">4. İdeyanız hansı mərhələdədir?</label>
+    <label for="stage">4. What stage is your idea at and what resources do you have?</label>
     <select id="stage">
-      <option selected disabled>Biznes hansı mərhələdədir?</option>
-      <option value="idea">Fikir mərhələsində</option>
-      <option value="prototype">Prototip var</option>
-      <option value="launched">Artıq fəaliyyət göstərir</option>
+      <option value="" selected disabled>Select your current stage</option>
+      <option value="idea">Idea stage</option>
+      <option value="prototype">Prototype available</option>
+      <option value="launched">Already operating</option>
     </select>
+    <input id="resources" type="text" placeholder="Available resources (e.g., team, budget, experience)" />
 
-    <label for="resources">Əlinizdə olan resurslar:</label>
-    <input id="resources" type="text" placeholder="Komanda, büdcə, təcrübə və s." />
+    <label for="goal">5. What is your goal and what worries you?</label>
+    <textarea id="goal" placeholder="What do you aim to achieve and what are your concerns?"></textarea>
 
-    <label for="goal">5. Əsas məqsədiniz və sizi narahat edən nədir?</label>
-    <textarea id="goal" placeholder="Uğur üçün hədəfiniz və qorxduğunuz risklər nələrdir?"></textarea>
-
-    <button type="submit">Qiymətləndir</button>
+    <button type="button" id="evaluateBtn" onclick="evaluateIdea()">Evaluate My Idea</button>
   </form>
 
-  <div class="result" id="resultContainer">
-    <h2>Uğur ehtimalı:</h2>
-    <div class="progress">
-      <div class="progress-bar" id="progressBar">
-        <span id="successPercent"></span>
-      </div>
-    </div>
-    <div class="feedback" id="feedbackText"></div>
-  </div>
+  <div class="result" id="resultBox" style="display:none;"></div>
 
   <script>
-    let isEvaluated = false;
+    function evaluateIdea() {
+      const idea = document.getElementById("idea").value.trim();
+      const problem = document.getElementById("problem").value.trim();
+      const audience = document.getElementById("audience").value.trim();
+      const market = document.getElementById("market").value.trim();
+      const stage = document.getElementById("stage").value;
+      const resources = document.getElementById("resources").value.trim();
+      const goal = document.getElementById("goal").value.trim();
 
-    function showEvaluationResult(probability) {
-      const progressBar = document.getElementById("progressBar");
-      const successPercent = document.getElementById("successPercent");
-      const feedbackText = document.getElementById("feedbackText");
-      const resultContainer = document.getElementById("resultContainer");
-
-      successPercent.textContent = probability + "%";
-      progressBar.style.width = probability + "%";
-
-      if (probability >= 80) {
-        progressBar.style.backgroundColor = "#4caf50";
-        feedbackText.textContent = "İdeyanız yüksək uğur potensialına malikdir!";
-      } else if (probability >= 50) {
-        progressBar.style.backgroundColor = "#ffc107";
-        feedbackText.textContent = "İdeyanızın potensialı var, lakin inkişaf etdirməyə ehtiyac var.";
-      } else {
-        progressBar.style.backgroundColor = "#f44336";
-        feedbackText.textContent = "Riskli ideyadır. Yenidən baxmaq faydalı olar.";
-      }
-
-      resultContainer.style.display = "block";
-
-      const button = document.querySelector("button[type='submit']");
-      button.disabled = true;
-      button.style.backgroundColor = "#ccc";
-      button.style.cursor = "not-allowed";
-      button.textContent = "Qiymətləndirildi";
-
-      isEvaluated = true;
-    }
-
-    function isFormComplete() {
-      const requiredFields = [
-        "idea",
-        "problem",
-        "audience",
-        "market",
-        "stage",
-        "resources",
-        "goal"
-      ];
-
-      for (const fieldId of requiredFields) {
-        const field = document.getElementById(fieldId);
-        if (!field || field.value.trim() === "" || field.value === "Biznes hansı mərhələdədir?") {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    function handleFormSubmit(event) {
-      event.preventDefault();
-
-      if (isEvaluated) {
+      if (!idea || !problem || !audience || !market || !stage || !resources || !goal) {
+        alert("Please fill out all the fields before evaluating.");
         return;
       }
 
-      if (!isFormComplete()) {
-        alert("Zəhmət olmasa bütün sahələri doldurun.");
-        return;
-      }
+      // Simple score system based on completeness
+      let score = 50;
+      if (resources.length > 20) score += 10;
+      if (problem.length > 30) score += 10;
+      if (goal.length > 20) score += 10;
+      if (idea.length > 20) score += 10;
 
-      const simulatedSuccess = Math.floor(Math.random() * 61) + 30;
-      showEvaluationResult(simulatedSuccess);
+      if (score > 100) score = 100;
+
+      const resultBox = document.getElementById("resultBox");
+      resultBox.style.display = "block";
+      resultBox.innerHTML = `Estimated potential success rate: <strong>${score}%</strong>`;
+
+      // Disable button after result shown
+      const btn = document.getElementById("evaluateBtn");
+      btn.disabled = true;
     }
-
-    window.onload = function () {
-      const form = document.querySelector("form");
-      if (form) {
-        form.addEventListener("submit", handleFormSubmit);
-      }
-    };
   </script>
 </body>
 </html>
