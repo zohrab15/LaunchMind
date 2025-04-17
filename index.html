@@ -2,88 +2,78 @@
 <html lang="az">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Launchmind – Biznes İdeyanızı Qiymətləndirək</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Launchmind – Biznes İdeyanızı Qiymətləndirək!</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
-      background-color: #f4f4f4;
+      background: #f0f0f5;
     }
-
     h1 {
       text-align: center;
       color: #333;
     }
-
     form {
-      background-color: #fff;
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
       padding: 20px;
       border-radius: 10px;
-      max-width: 600px;
-      margin: auto;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-
     textarea, input, select {
       width: 100%;
+      margin: 10px 0;
       padding: 10px;
-      margin-top: 5px;
+      font-size: 1em;
       border-radius: 5px;
       border: 1px solid #ccc;
-      font-size: 14px;
+      resize: vertical;
     }
-
     button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #007bff;
-      border: none;
+      width: 100%;
+      padding: 12px;
+      background-color: #4caf50;
       color: white;
-      font-size: 16px;
+      font-size: 1.1em;
+      border: none;
       border-radius: 5px;
       cursor: pointer;
     }
-
-    #resultContainer {
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .result {
       margin-top: 30px;
       display: none;
-      text-align: center;
     }
-
-    #progressBarContainer {
-      background-color: #ddd;
-      border-radius: 20px;
-      overflow: hidden;
+    .progress {
       height: 25px;
-      margin-bottom: 10px;
+      background: #eee;
+      border-radius: 5px;
+      overflow: hidden;
     }
-
-    #progressBar {
+    .progress-bar {
       height: 100%;
-      width: 0;
-      background-color: #4caf50;
-      text-align: center;
-      color: white;
+      width: 0%;
       line-height: 25px;
+      color: white;
+      text-align: center;
+      background-color: #4caf50;
       transition: width 1s ease-in-out;
     }
-
-    #feedbackText {
-      font-weight: bold;
-      font-size: 16px;
+    .feedback {
       margin-top: 10px;
+      font-weight: bold;
+      text-align: center;
     }
   </style>
 </head>
 <body>
   <h1>Launchmind – Biznes İdeyanızı Qiymətləndirək!</h1>
+
   <form>
     <label for="idea">1. Biznes ideyanız nədir?</label>
     <textarea id="idea" placeholder="Qısa şəkildə biznes fikrinizi təsvir edin (nə təklif edirsiniz və kimə?)"></textarea>
@@ -94,7 +84,7 @@
     <label for="audience">3. Kimlərə xidmət edirsiniz?</label>
     <input id="audience" type="text" placeholder="Hədəf auditoriya (məs: tələbələr, valideynlər, biznes sahibləri)" />
 
-    <label for="market">Və hansı bazarda fəaliyyət göstərmək istəyirsiniz?</label>
+    <label for="market">Hansı bazarda fəaliyyət göstərmək istəyirsiniz?</label>
     <input id="market" type="text" placeholder="Hədəf bazar (məs: lokal, region, beynəlxalq)" />
 
     <label for="stage">4. İdeyanız hansı mərhələdədir?</label>
@@ -106,7 +96,7 @@
     </select>
 
     <label for="resources">Əlinizdə olan resurslar:</label>
-    <input id="resources" type="text" placeholder="Resurslar (məs: komanda, büdcə, təcrübə)" />
+    <input id="resources" type="text" placeholder="Komanda, büdcə, təcrübə və s." />
 
     <label for="goal">5. Əsas məqsədiniz və sizi narahat edən nədir?</label>
     <textarea id="goal" placeholder="Uğur üçün hədəfiniz və qorxduğunuz risklər nələrdir?"></textarea>
@@ -114,15 +104,19 @@
     <button type="submit">Qiymətləndir</button>
   </form>
 
-  <div id="resultContainer">
-    <div id="progressBarContainer">
-      <div id="progressBar"></div>
+  <div class="result" id="resultContainer">
+    <h2>Uğur ehtimalı:</h2>
+    <div class="progress">
+      <div class="progress-bar" id="progressBar">
+        <span id="successPercent"></span>
+      </div>
     </div>
-    <div id="successPercent" style="font-size: 20px; margin-top: 10px;"></div>
-    <div id="feedbackText"></div>
+    <div class="feedback" id="feedbackText"></div>
   </div>
 
   <script>
+    let isEvaluated = false;
+
     function showEvaluationResult(probability) {
       const progressBar = document.getElementById("progressBar");
       const successPercent = document.getElementById("successPercent");
@@ -145,12 +139,13 @@
 
       resultContainer.style.display = "block";
 
-      // Qiymətləndir düyməsini deaktiv et
       const button = document.querySelector("button[type='submit']");
       button.disabled = true;
       button.style.backgroundColor = "#ccc";
       button.style.cursor = "not-allowed";
       button.textContent = "Qiymətləndirildi";
+
+      isEvaluated = true;
     }
 
     function isFormComplete() {
@@ -176,12 +171,16 @@
     function handleFormSubmit(event) {
       event.preventDefault();
 
+      if (isEvaluated) {
+        return;
+      }
+
       if (!isFormComplete()) {
         alert("Zəhmət olmasa bütün sahələri doldurun.");
         return;
       }
 
-      const simulatedSuccess = Math.floor(Math.random() * 61) + 30; // 30%-90% arası
+      const simulatedSuccess = Math.floor(Math.random() * 61) + 30;
       showEvaluationResult(simulatedSuccess);
     }
 
