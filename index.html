@@ -51,6 +51,10 @@
       border-radius: 5px;
       font-weight: bold;
     }
+    .result span {
+      font-size: 24px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -112,7 +116,10 @@
 
       const resultBox = document.getElementById("resultBox");
       resultBox.style.display = "block";
-      resultBox.innerHTML = `Estimated potential success rate: <strong>${score}%</strong>`;
+
+      // Add color to the result based on the score
+      let resultColor = score >= 80 ? 'green' : score >= 50 ? 'orange' : 'red';
+      resultBox.innerHTML = `Estimated potential success rate: <span style="color: ${resultColor};">${score}%</span>`;
 
       // Disable button after result shown
       const btn = document.getElementById("evaluateBtn");
