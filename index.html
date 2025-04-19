@@ -174,5 +174,32 @@
       }, 5000); // 5 seconds delay (5000 milliseconds)
     }
   </script>
+  <script>
+document.getElementById("ideaForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const idea = document.getElementById("ideaInput").value;
+
+    fetch("http://127.0.0.1:5000/api/evaluate", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ idea: idea })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("resultArea").innerHTML = `
+            <p><strong>Score:</strong> ${data.score}</p>
+            <p><strong>Explanation:</strong> ${data.text}</p>
+        `;
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        document.getElementById("resultArea").innerText = "An error occurred.";
+    });
+});
+</script>
+
 </body>
 </html>
