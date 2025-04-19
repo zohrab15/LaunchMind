@@ -51,9 +51,24 @@
       border-radius: 5px;
       font-weight: bold;
     }
-    .result span {
-      font-size: 24px;
-      font-weight: bold;
+
+    /* Spinner style */
+    .spinner {
+      margin: 0 auto;
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #2ecc71;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -88,6 +103,10 @@
     <button type="button" id="evaluateBtn" onclick="evaluateIdea()">Evaluate My Idea</button>
   </form>
 
+  <!-- Spinner -->
+  <div class="spinner" id="spinner"></div>
+
+  <!-- Result Box -->
   <div class="result" id="resultBox" style="display:none;"></div>
 
   <script>
@@ -105,28 +124,32 @@
         return;
       }
 
-      // Simple score system based on completeness
-      let score = 50;
-      if (resources.length > 20) score += 10;
-      if (problem.length > 30) score += 10;
-      if (goal.length > 20) score += 10;
-      if (idea.length > 20) score += 10;
+      // Spinner-i göstər
+      const spinner = document.getElementById("spinner");
+      spinner.style.display = "block";
 
-      if (score > 100) score = 100;
+      // Nəticəni simulyasiya etmək üçün gecikmə
+      setTimeout(() => {
+        spinner.style.display = "none"; // Spinner-i gizlət
 
-      const resultBox = document.getElementById("resultBox");
-      resultBox.style.display = "block";
+        // Hesablama
+        let score = 50;
+        if (resources.length > 20) score += 10;
+        if (problem.length > 30) score += 10;
+        if (goal.length > 20) score += 10;
+        if (idea.length > 20) score += 10;
+        if (score > 100) score = 100;
 
-      // Add color to the result box based on the score
-      let resultColor = score >= 80 ? 'green' : score >= 50 ? 'orange' : 'red';
-      resultBox.style.backgroundColor = resultColor; // Change background color of resultBox
+        const resultBox = document.getElementById("resultBox");
+        resultBox.style.display = "block";
+        resultBox.innerHTML = `Estimated potential success rate: <strong>${score}%</strong>`;
 
-      resultBox.innerHTML = `Estimated potential success rate: <span style="color: white;">${score}%</span>`;
-
-      // Disable button after result shown
-      const btn = document.getElementById("evaluateBtn");
-      btn.disabled = true;
+        // Disable button
+        const btn = document.getElementById("evaluateBtn");
+        btn.disabled = true;
+      }, 2000); // 2 saniyə gözləmə
     }
   </script>
+
 </body>
 </html>
