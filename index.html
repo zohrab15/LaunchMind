@@ -28,15 +28,10 @@
     }
     textarea, input, select, button {
       width: 100%;
-      margin: 10px 0 5px 0;
+      margin: 10px 0 20px 0;
       padding: 10px;
       border-radius: 5px;
       border: 1px solid #ccc;
-    }
-    small {
-      color: red;
-      display: block;
-      margin-bottom: 10px;
     }
     button {
       background-color: #2ecc71;
@@ -56,26 +51,53 @@
       border-radius: 5px;
       font-weight: bold;
     }
-    #spinner {
+
+    /* Dot-based loader styles */
+    .dot-loader {
+      display: inline-block;
+      width: 60px;
+      height: 15px;
+      position: relative;
+    }
+
+    .dot-loader div {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #2ecc71;
+      animation: dot-loader 1.2s infinite ease-in-out;
+    }
+
+    .dot-loader div:nth-child(1) {
+      left: 0;
+      animation-delay: 0s;
+    }
+
+    .dot-loader div:nth-child(2) {
+      left: 20px;
+      animation-delay: 0.4s;
+    }
+
+    .dot-loader div:nth-child(3) {
+      left: 40px;
+      animation-delay: 0.8s;
+    }
+
+    @keyframes dot-loader {
+      0%, 100% {
+        transform: scale(0);
+      }
+      50% {
+        transform: scale(1);
+      }
+    }
+
+    /* Hide loading when result is shown */
+    .loading {
       display: none;
-      text-align: center;
-      margin-top: 10px;
     }
-    .progress-bar {
-      height: 20px;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-top: 10px;
-      background-color: #eee;
-    }
-    .progress-bar-inner {
-      height: 100%;
-      text-align: center;
-      color: white;
-      font-weight: bold;
-      line-height: 20px;
-      transition: width 0.5s;
-    }
+
   </style>
 </head>
 <body>
@@ -85,23 +107,14 @@
 
   <form id="ideaForm">
     <label for="idea">1. What is your business idea?</label>
-    <textarea id="idea" minlength="20" maxlength="300" placeholder="Briefly describe your business idea (what do you offer and to whom?)"
-      oninput="checkLength(this, 20, 300, 'ideaWarning')"></textarea>
-    <small id="ideaWarning"></small>
+    <textarea id="idea" placeholder="Briefly describe your business idea (what do you offer and to whom?)"></textarea>
 
     <label for="problem">2. What problem does it solve and how is it unique?</label>
-    <textarea id="problem" minlength="30" maxlength="400" placeholder="Explain the problem in the market and how you are different."
-      oninput="checkLength(this, 30, 400, 'problemWarning')"></textarea>
-    <small id="problemWarning"></small>
+    <textarea id="problem" placeholder="Explain the problem in the market and how you are different."></textarea>
 
-    <label for="audience">3. Who are your target customers?</label>
-    <input id="audience" minlength="5" maxlength="100" placeholder="Target audience (e.g., students, parents, business owners)"
-      oninput="checkLength(this, 5, 100, 'audienceWarning')" />
-    <small id="audienceWarning"></small>
-
-    <input id="market" minlength="3" maxlength="100" placeholder="Target market (e.g., local, regional, global)"
-      oninput="checkLength(this, 3, 100, 'marketWarning')" />
-    <small id="marketWarning"></small>
+    <label for="audience">3. Who are your target customers and which market?</label>
+    <input id="audience" type="text" placeholder="Target audience (e.g., students, parents, business owners)" />
+    <input id="market" type="text" placeholder="Target market (e.g., local, regional, global)" />
 
     <label for="stage">4. What stage is your idea at and what resources do you have?</label>
     <select id="stage">
@@ -110,37 +123,23 @@
       <option value="prototype">Prototype available</option>
       <option value="launched">Already operating</option>
     </select>
-    <input id="resources" minlength="10" maxlength="200" placeholder="Available resources (e.g., team, budget, experience)"
-      oninput="checkLength(this, 10, 200, 'resourcesWarning')" />
-    <small id="resourcesWarning"></small>
+    <input id="resources" type="text" placeholder="Available resources (e.g., team, budget, experience)" />
 
     <label for="goal">5. What is your goal and what worries you?</label>
-    <textarea id="goal" minlength="20" maxlength="300" placeholder="What do you aim to achieve and what are your concerns?"
-      oninput="checkLength(this, 20, 300, 'goalWarning')"></textarea>
-    <small id="goalWarning"></small>
+    <textarea id="goal" placeholder="What do you aim to achieve and what are your concerns?"></textarea>
 
     <button type="button" id="evaluateBtn" onclick="evaluateIdea()">Evaluate My Idea</button>
-    <div id="spinner">⏳ Evaluating...</div>
   </form>
 
   <div class="result" id="resultBox" style="display:none;"></div>
-  <div class="progress-bar" id="progressContainer" style="display:none;">
-    <div class="progress-bar-inner" id="progressBar" style="width: 0%;">0%</div>
+
+  <div id="loading" class="dot-loader loading">
+    <div></div>
+    <div></div>
+    <div></div>
   </div>
 
   <script>
-    function checkLength(element, min, max, warningId) {
-      const val = element.value.trim();
-      const warning = document.getElementById(warningId);
-      if (val.length < min) {
-        warning.innerText = `Minimum ${min} characters required.`;
-      } else if (val.length > max) {
-        warning.innerText = `Maximum ${max} characters allowed.`;
-      } else {
-        warning.innerText = '';
-      }
-    }
-
     function evaluateIdea() {
       const idea = document.getElementById("idea").value.trim();
       const problem = document.getElementById("problem").value.trim();
@@ -155,47 +154,33 @@
         return;
       }
 
-      // Minimum/maximum checkləri ayrıca yoxlanır
-      if (
-        idea.length < 20 || idea.length > 300 ||
-        problem.length < 30 || problem.length > 400 ||
-        audience.length < 5 || audience.length > 100 ||
-        market.length < 3 || market.length > 100 ||
-        resources.length < 10 || resources.length > 200 ||
-        goal.length < 20 || goal.length > 300
-      ) {
-        alert("Please ensure all inputs meet length requirements.");
-        return;
-      }
+      // Show loading spinner
+      document.getElementById("loading").classList.remove("loading");
 
-      document.getElementById("evaluateBtn").disabled = true;
-      document.getElementById("spinner").style.display = "block";
+      // Simple score system based on completeness
+      let score = 50;
+      if (resources.length > 20) score += 10;
+      if (problem.length > 30) score += 10;
+      if (goal.length > 20) score += 10;
+      if (idea.length > 20) score += 10;
 
+      if (score > 100) score = 100;
+
+      // Hide loading and show result
       setTimeout(() => {
-        let score = 50;
-        if (resources.length > 20) score += 10;
-        if (problem.length > 30) score += 10;
-        if (goal.length > 20) score += 10;
-        if (idea.length > 20) score += 10;
-        if (score > 100) score = 100;
-
         const resultBox = document.getElementById("resultBox");
         resultBox.style.display = "block";
         resultBox.innerHTML = `Estimated potential success rate: <strong>${score}%</strong>`;
 
-        const progress = document.getElementById("progressBar");
-        const progressContainer = document.getElementById("progressContainer");
-        progressContainer.style.display = "block";
-        progress.style.width = `${score}%`;
-        progress.innerText = `${score}%`;
+        // Hide loading animation
+        document.getElementById("loading").classList.add("loading");
 
-        if (score < 60) progress.style.backgroundColor = "red";
-        else if (score < 80) progress.style.backgroundColor = "orange";
-        else progress.style.backgroundColor = "green";
-
-        document.getElementById("spinner").style.display = "none";
-      }, 1500);
+        // Disable button after result shown
+        const btn = document.getElementById("evaluateBtn");
+        btn.disabled = true;
+      }, 1500); // Simulate delay
     }
   </script>
+
 </body>
 </html>
