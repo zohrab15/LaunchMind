@@ -117,9 +117,11 @@
       const resultBox = document.getElementById("resultBox");
       resultBox.style.display = "block";
 
-      // Add color to the result based on the score
+      // Add color to the result box based on the score
       let resultColor = score >= 80 ? 'green' : score >= 50 ? 'orange' : 'red';
-      resultBox.innerHTML = `Estimated potential success rate: <span style="color: ${resultColor};">${score}%</span>`;
+      resultBox.style.backgroundColor = resultColor; // Change background color of resultBox
+
+      resultBox.innerHTML = `Estimated potential success rate: <span style="color: white;">${score}%</span>`;
 
       // Disable button after result shown
       const btn = document.getElementById("evaluateBtn");
