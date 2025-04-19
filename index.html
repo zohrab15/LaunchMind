@@ -52,52 +52,45 @@
       font-weight: bold;
     }
 
-    /* Dot-based loader styles */
-    .dot-loader {
+    /* Dot-based loader */
+    .loading {
       display: inline-block;
-      width: 60px;
-      height: 15px;
       position: relative;
+      width: 80px;
+      height: 10px;
     }
-
-    .dot-loader div {
+    .loading div {
       position: absolute;
       width: 10px;
       height: 10px;
       border-radius: 50%;
       background-color: #2ecc71;
-      animation: dot-loader 1.2s infinite ease-in-out;
+      animation: dot-blink 1s infinite ease-in-out;
     }
-
-    .dot-loader div:nth-child(1) {
+    .loading div:nth-child(1) {
       left: 0;
       animation-delay: 0s;
     }
-
-    .dot-loader div:nth-child(2) {
-      left: 20px;
+    .loading div:nth-child(2) {
+      left: 18px;
+      animation-delay: 0.2s;
+    }
+    .loading div:nth-child(3) {
+      left: 36px;
       animation-delay: 0.4s;
     }
 
-    .dot-loader div:nth-child(3) {
-      left: 40px;
-      animation-delay: 0.8s;
-    }
-
-    @keyframes dot-loader {
-      0%, 100% {
-        transform: scale(0);
+    @keyframes dot-blink {
+      0% {
+        opacity: 0;
       }
       50% {
-        transform: scale(1);
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
       }
     }
-
-    /* Hide loading when result is shown */
-    .loading {
-      display: none;
-    }
-
   </style>
 </head>
 <body>
@@ -131,13 +124,13 @@
     <button type="button" id="evaluateBtn" onclick="evaluateIdea()">Evaluate My Idea</button>
   </form>
 
-  <div class="result" id="resultBox" style="display:none;"></div>
-
-  <div id="loading" class="dot-loader loading">
+  <div class="loading" id="loading" style="display:none;">
     <div></div>
     <div></div>
     <div></div>
   </div>
+
+  <div class="result" id="resultBox" style="display:none;"></div>
 
   <script>
     function evaluateIdea() {
@@ -155,7 +148,7 @@
       }
 
       // Show loading spinner
-      document.getElementById("loading").classList.remove("loading");
+      document.getElementById("loading").style.display = "inline-block";
 
       // Simple score system based on completeness
       let score = 50;
@@ -166,21 +159,20 @@
 
       if (score > 100) score = 100;
 
-      // Hide loading and show result
+      // Hide loading and show result after 5 seconds delay
       setTimeout(() => {
         const resultBox = document.getElementById("resultBox");
         resultBox.style.display = "block";
         resultBox.innerHTML = `Estimated potential success rate: <strong>${score}%</strong>`;
 
         // Hide loading animation
-        document.getElementById("loading").classList.add("loading");
+        document.getElementById("loading").style.display = "none";
 
         // Disable button after result shown
         const btn = document.getElementById("evaluateBtn");
         btn.disabled = true;
-      }, 1500); // Simulate delay
+      }, 5000); // 5 seconds delay (5000 milliseconds)
     }
   </script>
-
 </body>
 </html>
