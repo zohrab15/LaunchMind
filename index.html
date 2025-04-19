@@ -51,28 +51,6 @@
       border-radius: 5px;
       font-weight: bold;
     }
-
-    /* Spinner */
-    #spinner {
-      display: none;
-      margin: 0 auto 20px;
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid #2ecc71;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    progress {
-      width: 100%;
-      height: 25px;
-      margin-top: 10px;
-    }
   </style>
 </head>
 <body>
@@ -82,14 +60,14 @@
 
   <form id="ideaForm">
     <label for="idea">1. What is your business idea?</label>
-    <textarea id="idea" placeholder="Briefly describe your business idea (what do you offer and to whom?)"></textarea>
+    <textarea id="idea" maxlength="300" placeholder="Briefly describe your business idea (what do you offer and to whom?)"></textarea>
 
     <label for="problem">2. What problem does it solve and how is it unique?</label>
-    <textarea id="problem" placeholder="Explain the problem in the market and how you are different."></textarea>
+    <textarea id="problem" maxlength="400" placeholder="Explain the problem in the market and how you are different."></textarea>
 
     <label for="audience">3. Who are your target customers and which market?</label>
-    <input id="audience" type="text" placeholder="Target audience (e.g., students, parents, business owners)" />
-    <input id="market" type="text" placeholder="Target market (e.g., local, regional, global)" />
+    <input id="audience" type="text" maxlength="100" placeholder="Target audience (e.g., students, parents, business owners)" />
+    <input id="market" type="text" maxlength="100" placeholder="Target market (e.g., local, regional, global)" />
 
     <label for="stage">4. What stage is your idea at and what resources do you have?</label>
     <select id="stage">
@@ -98,20 +76,15 @@
       <option value="prototype">Prototype available</option>
       <option value="launched">Already operating</option>
     </select>
-    <input id="resources" type="text" placeholder="Available resources (e.g., team, budget, experience)" />
+    <input id="resources" type="text" maxlength="200" placeholder="Available resources (e.g., team, budget, experience)" />
 
     <label for="goal">5. What is your goal and what worries you?</label>
-    <textarea id="goal" placeholder="What do you aim to achieve and what are your concerns?"></textarea>
+    <textarea id="goal" maxlength="300" placeholder="What do you aim to achieve and what are your concerns?"></textarea>
 
     <button type="button" id="evaluateBtn" onclick="evaluateIdea()">Evaluate My Idea</button>
   </form>
 
-  <div id="spinner"></div>
-
-  <div class="result" id="resultBox" style="display:none;">
-    <p id="resultText"></p>
-    <progress id="progressBar" value="0" max="100"></progress>
-  </div>
+  <div class="result" id="resultBox" style="display:none;"></div>
 
   <script>
     function evaluateIdea() {
@@ -122,51 +95,32 @@
       const stage = document.getElementById("stage").value;
       const resources = document.getElementById("resources").value.trim();
       const goal = document.getElementById("goal").value.trim();
-      const btn = document.getElementById("evaluateBtn");
-      const spinner = document.getElementById("spinner");
-      const resultBox = document.getElementById("resultBox");
-      const resultText = document.getElementById("resultText");
-      const progressBar = document.getElementById("progressBar");
 
-      if (!idea || !problem || !audience || !market || !stage || !resources || !goal) {
-        alert("Please fill out all the fields before evaluating.");
+      // Minimum uzunluq yoxlaması
+      if (
+        idea.length < 20 || problem.length < 30 ||
+        audience.length < 5 || market.length < 5 ||
+        !stage || resources.length < 10 || goal.length < 20
+      ) {
+        alert("Please fill out all fields correctly. Make sure each input has enough detail.");
         return;
       }
 
-      // Spinner göstər
-      spinner.style.display = "block";
-      btn.disabled = true;
+      // Sadə qiymətləndirmə sistemi
+      let score = 50;
+      if (resources.length > 20) score += 10;
+      if (problem.length > 30) score += 10;
+      if (goal.length > 20) score += 10;
+      if (idea.length > 20) score += 10;
+      if (score > 100) score = 100;
 
-      setTimeout(() => {
-        // Hesablamalar
-        let score = 50;
-        if (resources.length > 20) score += 10;
-        if (problem.length > 30) score += 10;
-        if (goal.length > 20) score += 10;
-        if (idea.length > 20) score += 10;
-        if (score > 100) score = 100;
+      const resultBox = document.getElementById("resultBox");
+      resultBox.style.display = "block";
+      resultBox.innerHTML = `Estimated potential success rate: <strong>${score}%</strong>`;
 
-        // Spinner gizlət
-        spinner.style.display = "none";
-
-        // Nəticəni göstər
-        resultBox.style.display = "block";
-        resultText.innerHTML = `Estimated potential success rate: <strong>${score}%</strong>`;
-        progressBar.value = score;
-
-        // Rəng dəyişməsi
-        let color;
-        if (score < 50) {
-          color = "#e74c3c"; // Qırmızı
-        } else if (score < 80) {
-          color = "#f39c12"; // Narıncı
-        } else {
-          color = "#2ecc71"; // Yaşıl
-        }
-        progressBar.style.setProperty('accent-color', color);
-      }, 1000); // Spinner gözləmə müddəti (1 saniyə)
+      // Nəticədən sonra düyməni deaktiv et
+      document.getElementById("evaluateBtn").disabled = true;
     }
   </script>
-
 </body>
 </html>
